@@ -5,6 +5,7 @@ import { headingFont, bodyFont } from "@/lib/fonts";
 import { Providers } from "@/components/layout/Providers";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AmbientBackground } from "@/components/layout/AmbientBackground";
 
 export const metadata: Metadata = {
   title: {
@@ -53,11 +54,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`} suppressHydrationWarning>
-      <body className="bg-soft-white text-cocoa antialiased">
+      <body className="text-espresso antialiased transition-colors duration-300 dark:bg-neutral-950 dark:text-neutral-100">
+        <AmbientBackground />
         <Providers>
-          <div className="relative flex min-h-screen flex-col overflow-x-hidden">
+          <div className="relative z-10 flex min-h-screen flex-col overflow-x-hidden">
             <Navbar />
-            <main className="flex-1 pt-24 md:pt-28">{children}</main>
+            <main className="flex-1 pt-28 md:pt-32">{children}</main>
             <Footer />
           </div>
         </Providers>

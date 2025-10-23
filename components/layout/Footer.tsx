@@ -42,8 +42,11 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-cocoa text-soft-white">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <footer className="relative isolate overflow-hidden bg-gradient-to-br from-espresso via-caramel to-espresso text-soft-white">
+      <div className="absolute left-[18%] top-[-20%] -z-10 h-80 w-80 rounded-full bg-white/10 blur-[140px]" />
+      <div className="absolute right-[12%] bottom-[-25%] -z-10 h-[22rem] w-[22rem] rounded-full bg-black/25 blur-[200px]" />
+
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-4">
             <h3 className="font-display text-2xl">SweetCrumb Bakery</h3>
@@ -73,7 +76,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               {socials.map((social) => (
-                <Link key={social.name} href={social.href} className="text-sm font-medium hover:text-white">
+                <Link key={social.name} href={social.href} className="text-sm font-medium transition hover:text-white">
                   {social.name}
                 </Link>
               ))}
@@ -85,37 +88,40 @@ export function Footer() {
               Get seasonal specials, baking tips, and early access to limited-edition treats.
             </p>
             <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="w-full rounded-full border border-transparent bg-soft-white px-4 py-2 text-sm text-cocoa placeholder:text-caramel/60 focus:border-caramel focus:outline-none"
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                  setStatus("idle");
-                }}
-                required
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="w-full rounded-full border border-white/40 bg-white/90 px-4 py-2 text-sm text-espresso placeholder:text-espresso/40 focus:border-white focus:outline-none"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                    setStatus("idle");
+                  }}
+                  required
+                />
+                <div className="pointer-events-none absolute inset-0 rounded-full shadow-[0_10px_40px_rgba(0,0,0,0.08)]" />
+              </div>
               <button
                 type="submit"
-                className="w-full rounded-full bg-caramel px-4 py-2 text-sm font-semibold text-soft-white transition hover:bg-caramel/90"
+                className="w-full rounded-full bg-gradient-to-r from-soft-white to-cream px-4 py-2 text-sm font-semibold text-caramel shadow-soft transition hover:-translate-y-0.5 hover:shadow-glow"
               >
                 Subscribe
               </button>
-              {status === "success" && (
-                <p className="text-xs text-cream">Thanks for joining our community!</p>
-              )}
-              {status === "error" && (
-                <p className="text-xs text-blush">Something went wrong. Please try again.</p>
-              )}
+              {status === "success" && <p className="text-xs text-cream">Thanks for joining our community!</p>}
+              {status === "error" && <p className="text-xs text-blush">Something went wrong. Please try again.</p>}
             </form>
           </div>
         </div>
-        <div className="mt-12 flex flex-col justify-between gap-4 border-t border-cream/20 pt-8 text-xs text-cream/70 md:flex-row">
+        <div className="mt-12 flex flex-col justify-between gap-4 border-t border-white/20 pt-8 text-xs text-cream/70 md:flex-row">
           <p>© {new Date().getFullYear()} SweetCrumb Bakery. Taste the love in every bite.</p>
           <div className="flex gap-4">
-            <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-white">Terms</Link>
+            <Link href="/privacy" className="transition hover:text-white">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="transition hover:text-white">
+              Terms
+            </Link>
           </div>
         </div>
       </div>
