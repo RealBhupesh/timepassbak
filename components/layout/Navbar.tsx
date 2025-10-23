@@ -30,63 +30,72 @@ export function Navbar() {
   const [cartOpen, setCartOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-transparent bg-soft-white/80 backdrop-blur-xl transition dark:bg-neutral-950/70">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+    <header className="fixed inset-x-0 top-0 z-40 flex justify-center px-4 pb-4 pt-6 transition-all duration-300">
+      <div className="flex w-full max-w-6xl items-center justify-between rounded-full border border-white/60 bg-white/70 px-4 py-3 shadow-glow backdrop-blur-2xl dark:border-white/10 dark:bg-neutral-900/70 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
           <button
-            className="rounded-full p-2 text-caramel transition hover:bg-caramel/10 lg:hidden"
+            className="rounded-full bg-white/70 p-2 text-caramel shadow-soft transition hover:-translate-y-0.5 hover:bg-white/90 lg:hidden"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
           >
             <Bars3BottomLeftIcon className="h-6 w-6" />
           </button>
           <Link href="/" className="flex items-center gap-3">
-            <div className="relative h-10 w-10 overflow-hidden rounded-full bg-caramel/10 shadow-soft">
+            <div className="relative h-11 w-11 overflow-hidden rounded-full border border-white/70 bg-white/70 shadow-soft">
               <Image
                 src="https://images.unsplash.com/photo-1542831371-d531d36971e6"
                 alt="SweetCrumb Bakery logo"
                 fill
                 className="object-cover"
-                sizes="40px"
+                sizes="44px"
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-display text-lg font-semibold text-cocoa dark:text-white">
+              <span className="font-display text-lg font-semibold text-espresso dark:text-white">
                 SweetCrumb Bakery
               </span>
-              <span className="text-xs uppercase tracking-[0.2em] text-caramel">
+              <span className="text-xs uppercase tracking-[0.32em] text-caramel/80">
                 Freshly baked happiness
               </span>
             </div>
           </Link>
         </div>
-        <nav className="hidden items-center gap-8 lg:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={clsx(
-                "text-sm font-medium transition hover:text-caramel",
-                pathname === item.href ? "text-caramel" : "text-cocoa/70 dark:text-neutral-200"
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-2 lg:flex">
+          {navigation.map((item) => {
+            const isActive = pathname === item.href;
+
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={clsx(
+                  "rounded-full px-4 py-2 text-sm font-medium transition-all duration-300",
+                  isActive
+                    ? "bg-caramel/20 text-caramel shadow-inner"
+                    : "text-espresso/70 hover:bg-white/60 hover:text-caramel dark:text-neutral-200 dark:hover:bg-neutral-800/70"
+                )}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
           <button
-            className="relative rounded-full bg-caramel px-5 py-2 text-sm font-semibold text-soft-white shadow-soft transition hover:-translate-y-0.5 hover:shadow-lg"
+            className="group relative overflow-hidden rounded-full bg-gradient-to-r from-caramel to-honey px-5 py-2 text-sm font-semibold text-soft-white shadow-floating transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow"
             onClick={() => setCartOpen(true)}
             aria-label="Open cart"
           >
-            <ShoppingBagIcon className="mr-2 inline h-5 w-5" />
-            Order Now
+            <span className="relative z-10 inline-flex items-center gap-2">
+              <ShoppingBagIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+              Order Now
+            </span>
+            <span className="absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </button>
           <Link
             href="/menu"
-            className="hidden rounded-full border border-caramel px-5 py-2 text-sm font-semibold text-caramel transition hover:bg-caramel/10 lg:inline-flex"
+            className="hidden rounded-full border border-caramel/40 px-5 py-2 text-sm font-semibold text-caramel transition-all duration-300 hover:border-transparent hover:bg-caramel/15 lg:inline-flex"
           >
             View Menu
           </Link>
@@ -117,49 +126,57 @@ export function Navbar() {
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <Dialog.Panel className="relative flex w-80 flex-col gap-6 bg-soft-white px-6 py-8 shadow-2xl dark:bg-neutral-900">
+              <Dialog.Panel className="relative flex w-80 flex-col gap-6 rounded-3xl border border-white/50 bg-white/80 px-6 py-8 shadow-floating backdrop-blur-2xl dark:border-white/10 dark:bg-neutral-900/90">
                 <button
-                  className="absolute right-4 top-4 rounded-full p-2 text-caramel transition hover:bg-caramel/10"
+                  className="absolute right-4 top-4 rounded-full bg-white/70 p-2 text-caramel shadow-soft transition hover:-translate-y-0.5 hover:bg-white"
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
                 <div className="mt-4 flex flex-col">
-                  <span className="font-display text-lg font-semibold text-cocoa dark:text-white">
+                  <span className="font-display text-lg font-semibold text-espresso dark:text-white">
                     SweetCrumb Bakery
                   </span>
-                  <span className="text-xs uppercase tracking-[0.2em] text-caramel">
+                  <span className="text-xs uppercase tracking-[0.32em] text-caramel/80">
                     Freshly baked happiness
                   </span>
                 </div>
-                <nav className="flex flex-col gap-4">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      onClick={() => setOpen(false)}
-                      className={clsx(
-                        "text-base font-medium transition hover:text-caramel",
-                        pathname === item.href
-                          ? "text-caramel"
-                          : "text-cocoa/80 dark:text-neutral-100"
-                      )}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                <nav className="flex flex-col gap-3">
+                  {navigation.map((item) => {
+                    const isActive = pathname === item.href;
+
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className={clsx(
+                          "rounded-2xl px-4 py-3 text-base font-medium transition-all duration-300",
+                          isActive
+                            ? "bg-caramel/20 text-caramel shadow-inner"
+                            : "text-espresso/80 hover:bg-white/70 hover:text-caramel dark:text-neutral-100 dark:hover:bg-neutral-800/80"
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    );
+                  })}
                 </nav>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <ThemeToggle />
                   <button
-                    className="flex-1 rounded-full bg-caramel px-4 py-2 text-sm font-semibold text-soft-white"
+                    className="group relative flex-1 overflow-hidden rounded-full bg-gradient-to-r from-caramel to-honey px-4 py-2 text-sm font-semibold text-soft-white shadow-floating transition-all duration-300 hover:-translate-y-0.5 hover:shadow-glow"
                     onClick={() => {
                       setOpen(false);
                       setCartOpen(true);
                     }}
                   >
-                    Order Now
+                    <span className="relative z-10 inline-flex w-full items-center justify-center gap-2">
+                      <ShoppingBagIcon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                      Order Now
+                    </span>
+                    <span className="absolute inset-0 bg-white/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   </button>
                 </div>
               </Dialog.Panel>

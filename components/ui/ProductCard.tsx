@@ -14,7 +14,7 @@ export function ProductCard({ item, category }: ProductCardProps) {
   const { addItem } = useCart();
 
   return (
-    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-white/70 shadow-soft transition hover:-translate-y-2 hover:shadow-2xl dark:bg-neutral-900/70">
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-[2.5rem] border border-white/60 bg-white/75 shadow-floating backdrop-blur transition-all duration-500 hover:-translate-y-3 hover:shadow-glow dark:border-white/10 dark:bg-neutral-900/70">
       <div className="relative h-60 w-full overflow-hidden">
         <Image
           src={item.image}
@@ -23,24 +23,24 @@ export function ProductCard({ item, category }: ProductCardProps) {
           className="object-cover transition duration-700 group-hover:scale-105"
           sizes="(min-width: 1024px) 25vw, (min-width: 768px) 40vw, 80vw"
         />
+        <div className="pointer-events-none absolute inset-x-6 top-6 flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-soft-white">
+          <span className="rounded-full bg-black/25 px-3 py-1 backdrop-blur">{category}</span>
+          {item.tags.length > 0 && (
+            <span className="rounded-full bg-black/25 px-3 py-1 backdrop-blur">{item.tags[0]}</span>
+          )}
+        </div>
       </div>
-      <div className="flex flex-1 flex-col gap-4 px-6 py-6">
-        <div>
-          <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-caramel">
-            <span>{category}</span>
-            {item.tags.length > 0 && <span>{item.tags[0]}</span>}
-          </div>
-          <h3 className="mt-2 font-display text-xl font-semibold text-cocoa dark:text-white">
-            {item.name}
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-cocoa/80 dark:text-neutral-300">
-            {item.description}
-          </p>
+      <div className="flex flex-1 flex-col gap-5 px-6 pb-7 pt-6 sm:px-8">
+        <div className="space-y-3">
+          <h3 className="font-display text-2xl font-semibold text-espresso dark:text-white">{item.name}</h3>
+          <p className="text-sm leading-relaxed text-espresso/75 dark:text-neutral-300">{item.description}</p>
         </div>
         <div className="mt-auto flex items-center justify-between">
-          <span className="text-lg font-semibold text-caramel">${item.price.toFixed(2)}</span>
+          <span className="rounded-full bg-caramel/15 px-4 py-2 text-sm font-semibold text-caramel shadow-soft">
+            ${item.price.toFixed(2)}
+          </span>
           <button
-            className="flex items-center gap-2 rounded-full bg-caramel px-4 py-2 text-sm font-semibold text-soft-white transition hover:bg-caramel/90"
+            className="group/btn inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-caramel to-honey px-5 py-2 text-sm font-semibold text-soft-white shadow-soft transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-glow"
             onClick={() =>
               addItem({
                 id: item.id,
@@ -51,7 +51,7 @@ export function ProductCard({ item, category }: ProductCardProps) {
               })
             }
           >
-            <ShoppingBagIcon className="h-5 w-5" />
+            <ShoppingBagIcon className="h-5 w-5 transition-transform duration-300 group-hover/btn:scale-110" />
             Add to cart
           </button>
         </div>

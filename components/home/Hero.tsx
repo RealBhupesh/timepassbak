@@ -4,105 +4,135 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+const heroStats = [
+  { label: "Baked fresh daily", value: "100%" },
+  { label: "Preservatives", value: "0%" },
+  { label: "Local farm partners", value: "12" }
+];
+
 export function Hero() {
+  const ratingStars = Array.from({ length: 5 }, (_, index) => (
+    <span
+      key={index}
+      className="text-lg leading-none text-caramel drop-shadow-[0_2px_4px_rgba(195,142,112,0.35)]"
+    >
+      ★
+    </span>
+  ));
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-cream via-soft-white to-blush/40">
-      <div className="absolute inset-0 -z-10">
-        <Image
-          src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
-          alt="Freshly baked pastries"
-          fill
-          className="object-cover opacity-20"
-          sizes="100vw"
-          priority
-        />
-      </div>
-      <div className="mx-auto flex max-w-7xl flex-col gap-12 px-4 pb-24 pt-32 sm:px-6 lg:flex-row lg:items-center lg:px-8">
-        <div className="max-w-2xl space-y-6">
+    <section className="relative isolate overflow-hidden pb-28 pt-36 sm:pt-40">
+      <div className="absolute inset-0 -z-10 bg-hero-gradient" />
+      <div className="absolute left-1/2 top-16 -z-10 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-honey/15 blur-3xl" />
+      <div className="absolute left-[6%] top-[48%] -z-10 h-64 w-64 rounded-full bg-rose/20 blur-3xl" />
+      <div className="absolute right-[8%] top-[18%] -z-10 h-72 w-72 rounded-full bg-caramel/15 blur-[120px]" />
+
+      <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+        <div className="space-y-8">
           <motion.span
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-caramel shadow-soft"
+            className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/70 px-5 py-1.5 text-xs font-semibold uppercase tracking-[0.4em] text-caramel shadow-soft backdrop-blur dark:border-white/10 dark:bg-neutral-900/60"
           >
-            Freshly baked happiness · every day
+            Now baking
+            <span className="h-1.5 w-1.5 rounded-full bg-caramel" />
+            Freshly baked happiness
           </motion.span>
           <motion.h1
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-display text-4xl font-bold text-cocoa sm:text-5xl lg:text-6xl"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.16 }}
+            className="font-display text-4xl font-semibold leading-tight text-espresso dark:text-white sm:text-5xl lg:text-[3.8rem]"
           >
-            Handcrafted cakes, pastries, and breads baked with love in Willowbrook.
+            Handcrafted cakes, pastries & breads baked for the moments you want to savor most.
           </motion.h1>
           <motion.p
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-lg text-cocoa/70"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.24 }}
+            className="max-w-2xl text-lg text-espresso/75 dark:text-neutral-200"
           >
-            Our ovens fire up before sunrise so you can savor buttery-soft croissants, aromatic sourdough, and celebration-worthy cakes made without preservatives.
+            From laminated croissants to slow-fermented sourdough, every batch is made before sunrise with stone-milled
+            grains, fair-trade chocolate, and zero preservatives.
           </motion.p>
           <motion.div
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.32 }}
             className="flex flex-wrap items-center gap-4"
           >
             <Link
               href="/menu"
-              className="rounded-full bg-caramel px-8 py-3 text-sm font-semibold text-soft-white shadow-soft transition hover:-translate-y-1 hover:shadow-xl"
+              className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-caramel to-honey px-8 py-3 text-sm font-semibold text-soft-white shadow-floating transition-all duration-300 hover:-translate-y-1 hover:shadow-glow"
             >
-              Order your favorite treat now
+              <span className="relative z-10">Order your favorite treat</span>
+              <span className="absolute inset-0 bg-white/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             </Link>
             <Link
               href="/custom-orders"
-              className="rounded-full border border-caramel px-8 py-3 text-sm font-semibold text-caramel transition hover:border-caramel/60 hover:bg-caramel/10"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-caramel/40 px-8 py-3 text-sm font-semibold text-caramel transition-all duration-300 hover:border-transparent hover:bg-caramel/15"
             >
               Explore custom cakes
             </Link>
           </motion.div>
-          <motion.dl
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="grid gap-6 pt-8 sm:grid-cols-3"
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="flex flex-wrap items-center gap-4 pt-2 text-sm text-espresso/70 dark:text-neutral-300"
           >
-            <div>
-              <dt className="text-xs uppercase tracking-[0.3em] text-caramel">Baked fresh daily</dt>
-              <dd className="mt-2 font-display text-2xl text-cocoa">100%</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-[0.3em] text-caramel">Preservatives</dt>
-              <dd className="mt-2 font-display text-2xl text-cocoa">0%</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-[0.3em] text-caramel">Local sourcing</dt>
-              <dd className="mt-2 font-display text-2xl text-cocoa">12 farms</dd>
-            </div>
-          </motion.dl>
+            <div className="flex items-center gap-1">{ratingStars}</div>
+            <span>4.9/5 average from 3,200 neighbor celebrations</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.48 }}
+            className="grid gap-4 pt-6 sm:grid-cols-3"
+          >
+            {heroStats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-3xl border border-white/60 bg-white/70 px-5 py-4 text-left shadow-soft backdrop-blur dark:border-white/10 dark:bg-neutral-900/70"
+              >
+                <p className="text-xs uppercase tracking-[0.35em] text-caramel/80">{stat.label}</p>
+                <p className="mt-3 font-display text-2xl text-espresso dark:text-white">{stat.value}</p>
+              </div>
+            ))}
+          </motion.div>
         </div>
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="relative flex-1"
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="relative"
         >
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[3rem] bg-white/60 shadow-2xl">
-            <Image
-              src="https://images.unsplash.com/photo-1514516430032-7d5b0f8d3f91"
-              alt="Baker dusting croissants with sugar"
-              fill
-              className="object-cover"
-              sizes="(min-width: 1024px) 40vw, 80vw"
-              priority
-            />
+          <div className="relative overflow-hidden rounded-[3.5rem] border border-white/50 bg-white/60 p-3 shadow-floating backdrop-blur dark:border-white/10 dark:bg-neutral-900/70">
+            <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2.7rem]">
+              <Image
+                src="https://images.unsplash.com/photo-1514516430032-7d5b0f8d3f91"
+                alt="Baker dusting croissants with sugar"
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 40vw, 80vw"
+                priority
+              />
+            </div>
           </div>
-          <div className="absolute -bottom-10 -left-6 hidden w-60 rounded-3xl bg-cocoa px-6 py-5 text-soft-white shadow-soft lg:block">
-            <p className="text-xs uppercase tracking-[0.3em] text-cream/70">Today in the oven</p>
-            <p className="mt-2 font-display text-xl">Brown butter cardamom buns</p>
-            <p className="mt-1 text-sm text-cream/80">Available after 8:00 AM while they last.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="absolute -bottom-12 left-1/2 w-[85%] -translate-x-1/2 rounded-3xl border border-white/50 bg-white/85 px-6 py-5 shadow-glow backdrop-blur dark:bg-neutral-900/80"
+          >
+            <p className="text-xs uppercase tracking-[0.35em] text-caramel/80">Today in the oven</p>
+            <p className="mt-2 font-display text-xl text-espresso dark:text-white">Brown butter cardamom buns</p>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm text-espresso/70 dark:text-neutral-200">
+              <span>Available after 8:00 AM</span>
+              <span className="rounded-full bg-caramel/15 px-3 py-1 text-xs font-semibold text-caramel">Limited batch</span>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
