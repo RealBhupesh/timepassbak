@@ -3,12 +3,32 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { MongoClient } from "mongodb";
 
-const storageDir = path.join(process.cwd(), "data", "storage");
+function resolvePath(target: string) {
+  return path.isAbsolute(target) ? target : path.join(process.cwd(), target);
+}
+
+const storageDir = (() => {
+  const customPath = process.env.DATA_STORAGE_PATH;
+  if (customPath && customPath.trim() !== "") {
+    return resolvePath(customPath.trim());
+  }
+  if (process.env.VERCEL) {
+    return path.join("/tmp", "sweetcrumb-storage");
+  }
+  return path.join(process.cwd(), "data", "storage");
+})();
 
 let cachedClient: MongoClient | null = null;
 
 async function ensureStorageDir() {
-  await fs.mkdir(storageDir, { recursive: true });
+  try {
+    await fs.mkdir(storageDir, { recursive: true });
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code !== "EEXIST") {
+      console.error("Failed to ensure storage directory", error);
+    }
+  }
 }
 
 async function getMongoClient() {
@@ -43,12 +63,20 @@ export async function saveDocument<T extends Record<string, unknown>>(
     const content = await fs.readFile(filePath, "utf8");
     existing = JSON.parse(content);
   } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code !== "ENOENT") {
+      console.warn(`Unable to read local storage file for ${collection}`, error);
+    }
     existing = [];
   }
 
   const id = randomUUID();
   existing.push({ ...document, id });
-  await fs.writeFile(filePath, JSON.stringify(existing, null, 2));
+  try {
+    await fs.writeFile(filePath, JSON.stringify(existing, null, 2));
+  } catch (error) {
+    console.error(`Failed to persist document for ${collection}`, error);
+  }
   return { id };
 }
 
@@ -68,6 +96,10 @@ export async function listDocuments(collection: string) {
     const content = await fs.readFile(filePath, "utf8");
     return JSON.parse(content);
   } catch (error) {
+    const code = (error as NodeJS.ErrnoException).code;
+    if (code !== "ENOENT") {
+      console.warn(`Unable to read local storage file for ${collection}`, error);
+    }
     return [];
   }
 }

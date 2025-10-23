@@ -51,11 +51,23 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 # Optional: MongoDB persistence
 MONGO_URI=mongodb+srv://...
 MONGO_DB=sweetcrumb
+
+# Optional: override fallback storage paths
+DATA_STORAGE_PATH=data/storage
+UPLOADS_DIR=public/uploads
 ```
 
 > Without `STRIPE_SECRET_KEY`, checkout requests are saved and acknowledged, but users are prompted to finalize payment directly with the bakery.
 
-> Without `MONGO_URI`, form submissions fall back to JSON storage under `data/storage/` (ignored by Git) to preserve data during local development.
+> Without `MONGO_URI`, form submissions fall back to JSON storage under `data/storage/` for local development. On Vercel deployments this fallback uses the ephemeral `/tmp` directory, so data resets between function invocations.
+
+## ☁️ Deploying to Vercel
+
+- The project is fully compatible with Vercel’s serverless platform. Deploy via the [Vercel CLI](https://vercel.com/docs/cli) or the GitHub integration.
+- Configure the same environment variables shown above inside your Vercel project (`STRIPE_SECRET_KEY`, `NEXT_PUBLIC_SITE_URL`, `MONGO_URI`, etc.).
+- If no database is provided, submissions are buffered in the deployment’s ephemeral `/tmp` directory; add MongoDB (or another persistent store) before going live.
+- Uploaded design references are captured as inline Base64 metadata when running on Vercel. Point `UPLOADS_DIR` to an external storage integration if you need durable assets.
+- You can override the fallback directories using `DATA_STORAGE_PATH` and `UPLOADS_DIR` when running outside of Vercel.
 
 ## 📄 API Routes
 
@@ -102,7 +114,7 @@ public/             // Static assets & uploads
 
 - Orders, contact requests, custom inquiries, and newsletter signups are saved via `lib/persistence.ts`.
 - When `MONGO_URI` is present, data is stored in MongoDB. Otherwise, submissions are written to JSON files under `data/storage/` for quick prototyping.
-- Uploaded design references are saved in `public/uploads/` and ignored by Git.
+- Uploaded design references are saved in `public/uploads/` during local development (ignored by Git) and captured as inline Base64 metadata on Vercel.
 
 ## 📣 Accessibility & Performance
 

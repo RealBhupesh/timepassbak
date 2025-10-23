@@ -15,17 +15,72 @@ const schema = z.object({
   notes: z.string().optional()
 });
 
-async function storeUpload(file: File | null) {
+type StoredDesignReference = {
+  fileName: string;
+  size: number;
+  mimeType: string;
+  url?: string;
+  base64?: string;
+};
+
+function resolveUploadDir() {
+  const customDir = process.env.UPLOADS_DIR;
+  if (customDir && customDir.trim() !== "") {
+    return path.isAbsolute(customDir) ? customDir : path.join(process.cwd(), customDir);
+  }
+  if (process.env.VERCEL) {
+    return path.join("/tmp", "sweetcrumb-uploads");
+  }
+  return path.join(process.cwd(), "public", "uploads");
+}
+
+async function storeUpload(file: File | null): Promise<StoredDesignReference | null> {
   if (!file || file.size === 0) return null;
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const safeName = file.name.replace(/[^a-zA-Z0-9.\-]/g, "_");
   const fileName = `${Date.now()}-${safeName}`;
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  await fs.mkdir(uploadDir, { recursive: true });
-  const filePath = path.join(uploadDir, fileName);
-  await fs.writeFile(filePath, buffer);
-  return `/uploads/${fileName}`;
+  const mimeType = file.type || "application/octet-stream";
+  const customUploadDir = process.env.UPLOADS_DIR?.trim();
+  const shouldInline = Boolean(process.env.VERCEL) && !customUploadDir;
+
+  if (shouldInline) {
+    return {
+      fileName,
+      size: file.size,
+      mimeType,
+      base64: buffer.toString("base64")
+    };
+  }
+
+  const uploadDir = resolveUploadDir();
+  try {
+    await fs.mkdir(uploadDir, { recursive: true });
+    const filePath = path.join(uploadDir, fileName);
+    await fs.writeFile(filePath, buffer);
+
+    let publicUrl: string | undefined;
+    const publicRoot = path.join(process.cwd(), "public");
+    if (filePath.startsWith(publicRoot)) {
+      const relativePath = filePath.slice(publicRoot.length).replace(/\\/g, "/");
+      publicUrl = relativePath.startsWith("/") ? relativePath : `/${relativePath}`;
+    }
+
+    return {
+      fileName,
+      size: file.size,
+      mimeType,
+      url: publicUrl ?? filePath
+    };
+  } catch (error) {
+    console.error("Failed to store upload", error);
+    return {
+      fileName,
+      size: file.size,
+      mimeType,
+      base64: buffer.toString("base64")
+    };
+  }
 }
 
 export async function POST(request: Request) {
@@ -38,7 +93,8 @@ export async function POST(request: Request) {
       occasion: formData.get("occasion"),
       eventDate: formData.get("eventDate"),
       servings: formData.get("servings"),
-      flavorPreferences: (formData.getAll("flavorPreferences") as string[]).join(", ") ||
+      flavorPreferences:
+        (formData.getAll("flavorPreferences") as string[]).join(", ") ||
         (formData.get("flavorPreferences") as string | null) ||
         "",
       notes: formData.get("notes") ?? undefined
